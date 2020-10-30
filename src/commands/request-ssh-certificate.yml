@@ -1,13 +1,4 @@
 description: Request SSH certificate
-parameters:
-  ssh-ca-role:
-    type: string
-  ssh-ca-url:
-    type: string
-  ssh-ca-handler-public-key:
-    type: string
-  ssh-ca-machine-user:
-    type: string
 steps:
   - run:
       name: request-ssh-certificate
@@ -38,10 +29,10 @@ steps:
 
         # Request certificate
         /tmp/ssh-ca-client \
-          --ca-url "<< parameters.ssh-ca-url >>" \
-          --handler-public-key "<< parameters.ssh-ca-handler-public-key >>" \
+          --ca-url "${SSH_CA_URL}" \
+          --handler-public-key "${SSH_CA_HANDLER_PUBLIC_KEY}" \
           machine-user \
-          --username "<< parameters.ssh-ca-machine-user >>" \
-          --role "<< parameters.ssh-ca-role >>"
+          --username "${SSH_CA_MACHINE_USER}" \
+          --role "${SSH_CA_ROLE}"
 
         echo "export SSH_AUTH_SOCK=${SSH_AUTH_SOCK}" >> $BASH_ENV
