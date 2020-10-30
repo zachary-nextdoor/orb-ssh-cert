@@ -43,3 +43,5 @@ steps:
           machine-user \
           --username "<< parameters.ssh-ca-machine-user >>" \
           --role "<< parameters.ssh-ca-role >>"
+
+        echo 'export SSH_AUTH_SOCK=${SSH_AUTH_SOCK}' >> $BASH_ENV
