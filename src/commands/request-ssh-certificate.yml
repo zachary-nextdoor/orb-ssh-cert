@@ -1,0 +1,33 @@
+description: Request SSH certificate
+parameters:
+  ssh-ca-role:
+    type: string
+  ssh-ca-url:
+    type: string
+  ssh-ca-handler-public-key:
+    type: string
+  ssh-ca-machine-user:
+    type: string
+steps:
+  - run:
+      name: request-ssh-certificate
+      command: |
+        set -e
+
+        # Fetch binary
+        if [ "$(uname)" == "Darwin" ]; then
+            client_type="mac"     
+        else
+            client_type="linux" 
+        fi
+
+        wget -q --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 3 -P /tmp "https://s3-us-west-2.amazonaws.com/ssh-ca-binary-corp-nextdoor-com/0.0.13/ca_client.${client_type}/ssh-ca-client"
+        chmod +x /tmp/ssh-ca-client
+        mkdir -p "${HOME}/.ssh"
+        SSH_AUTH_SOCK="${HOME}/.ssh/S.ssh-agent.ssh"
+
+        # Start ssh-agent
+        ssh-agent -a "${SSH_AUTH_SOCK}"
+
+        # Request certificate
+        /tmp/ssh-ca-client --ca-url "<< parameters.ssh-ca-url >>" --handler-public-key "<< parameters.ssh-ca-handler-public-key >>" machine-user --username "<< parameters.ssh-ca-machine-user >>" --role "<< parameters.application-name >>"
