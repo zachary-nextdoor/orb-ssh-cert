@@ -42,4 +42,4 @@ steps:
           --handler-public-key "<< parameters.ssh-ca-handler-public-key >>" \
           machine-user \
           --username "<< parameters.ssh-ca-machine-user >>" \
-          --role "<< parameters.application-name >>"
+          --role "<< parameters.ssh-ca-role >>"
